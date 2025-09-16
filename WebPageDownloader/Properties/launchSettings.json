@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WebPageDownloader": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

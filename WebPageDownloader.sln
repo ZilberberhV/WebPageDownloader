@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebPageDownloader", "WebPageDownloader\WebPageDownloader.csproj", "{5968F281-113C-478D-B7DF-A2AA0BEE5F9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebPageDownloader.Core", "WebPageDownloader.Core\WebPageDownloader.Core.csproj", "{333F13D0-FE87-4463-8CE2-6F664546EAB0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5968F281-113C-478D-B7DF-A2AA0BEE5F9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5968F281-113C-478D-B7DF-A2AA0BEE5F9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5968F281-113C-478D-B7DF-A2AA0BEE5F9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5968F281-113C-478D-B7DF-A2AA0BEE5F9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{333F13D0-FE87-4463-8CE2-6F664546EAB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{333F13D0-FE87-4463-8CE2-6F664546EAB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{333F13D0-FE87-4463-8CE2-6F664546EAB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{333F13D0-FE87-4463-8CE2-6F664546EAB0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ABCE550E-BA39-49E4-AC63-12582D57D58F}
+	EndGlobalSection
+EndGlobal
