@@ -6,9 +6,8 @@ using WebPageDownloader.Core.Interfaces;
 var defaultUrls = new[]
 {
     "https://www.entaingroup.com/",
-    "https://www.microsoft.com/en-us/",
-    "https://www.github.com/",
-    "https://www.wikipedia.org/",
+    "https://docs.github.com/en",
+    "https://learn.microsoft.com/en-us/training/",
     "https://owasp.org/",
     "https://www.opengroup.org/togaf",
 };

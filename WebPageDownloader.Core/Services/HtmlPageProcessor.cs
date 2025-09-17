@@ -39,7 +39,6 @@ internal partial class HtmlPageProcessor
             .ToList();
 
         var styleNodes = document.DocumentNode.SelectNodes("//*[@style]") ?? new HtmlNodeCollection(null);
-        var styleUrlRegex = BackgroundImageRegex();
 
         foreach (var node in styleNodes)
         {

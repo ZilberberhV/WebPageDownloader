@@ -93,7 +93,7 @@ internal partial class PageDownloadService : IPageDownloadService
 
             var resourceUrls = HtmlPageProcessor.ProcessHtmlPageReferences(doc, uri).ToList();
 
-            _fileSystemAccessor.CreateFolder(downloadRootFolder);
+            _fileSystemAccessor.CreateFolder(hostFolder);
             var downloadTasks = resourceUrls.Select(async resourceUri =>
             {
                 try
@@ -113,7 +113,7 @@ internal partial class PageDownloadService : IPageDownloadService
 
             var htmlPath = Path.Combine(hostFolder, "index.html");
 
-            var outputStream = _fileSystemAccessor.GetFileWriteStream(htmlPath);
+            using var outputStream = _fileSystemAccessor.GetFileWriteStream(htmlPath);
             doc.Save(outputStream);
 
             return new SavedPage(url, htmlPath, null);
