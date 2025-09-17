@@ -12,6 +12,15 @@ This solution is centered around a class library that encapsulates the logic for
   - Reference this library from other .NET projects to utilize its web downloading functionality.
   - Contains all business logic and is independent of any user interface.
 
+#### Functionality Details
+- Downloads the main HTML page and all referenced resources, including:
+  - JavaScript files (`<script src=...>`)
+  - CSS stylesheets (`<link rel="stylesheet" href=...>`)
+  - Images (`<img src=...>`, CSS background images, etc.)
+  - HTML tables and other embedded resources as needed
+- Updates references in the downloaded HTML to point to the local paths of the downloaded files, ensuring offline usability.
+- Updates all `<a>` (anchor) tags to use absolute URLs, so navigation links remain functional even when viewed offline.
+
 ### 2. WebPageDownloader (Console Application)
 - **Purpose:**
   - Provides a command-line interface to invoke the functionality of the core library.
