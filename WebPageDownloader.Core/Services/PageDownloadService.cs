@@ -8,15 +8,16 @@ namespace WebPageDownloader.Core.Services;
 
 internal partial class PageDownloadService : IPageDownloadService
 {
-
-
+    private readonly IFileSystemAccessor _fileSystemAccessor;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger _logger;
 
     public PageDownloadService(
+        IFileSystemAccessor fileSystemAccessor,
         IHttpClientFactory httpClientFactory,
         ILogger<PageDownloadService> logger)
     {
+        _fileSystemAccessor = fileSystemAccessor;
         _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
@@ -27,11 +28,11 @@ internal partial class PageDownloadService : IPageDownloadService
     /// <remarks>This method downloads each web page asynchronously and yields the results as they become
     /// available.  The method supports cancellation via the <paramref name="cancellationToken"/> parameter.</remarks>
     /// <param name="urls">A collection of URLs representing the web pages to download.</param>
-    /// <param name="downloadsRootFolder">The root folder where the downloaded pages will be saved. Defaults to "Downloads".</param>
+    /// <param name="downloadsRootFolder">The root folder where the downloaded pages will be saved.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests. The operation is canceled if the token is triggered.</param>
     /// <returns>An asynchronous stream of <see cref="SavedPage"/> objects, each representing a successfully downloaded and saved
     /// web page.</returns>
-    public async IAsyncEnumerable<SavedPage> DownloadPagesAsync(IEnumerable<string> urls, string downloadsRootFolder = "Downloads", [EnumeratorCancellation]CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<SavedPage> DownloadPagesAsync(IEnumerable<string> urls, string downloadsRootFolder, [EnumeratorCancellation]CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Starting asynchronous downloading of web pages");
 
@@ -60,11 +61,11 @@ internal partial class PageDownloadService : IPageDownloadService
     /// will save the content of each URL to a file in the specified <paramref name="downloadsRootFolder"/> 
     /// as well as all referenced resources. If the folder does not exist, it will be created.</remarks>
     /// <param name="urls">A collection of URLs to download.</param>
-    /// <param name="downloadsRootFolder">The root folder where the downloaded pages will be saved. Defaults to "Downloads" if not specified.</param>
+    /// <param name="downloadsRootFolder">The root folder where the downloaded pages will be saved.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a collection of <see
     /// cref="SavedPage"/> objects representing the downloaded pages.</returns>
-    public async Task<IEnumerable<SavedPage>> DownloadAllPagesAsync(IEnumerable<string> urls, string downloadsRootFolder = "Downloads", CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<SavedPage>> DownloadAllPagesAsync(IEnumerable<string> urls, string downloadsRootFolder, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Starting bulk downloading of web pages");
 
@@ -92,7 +93,7 @@ internal partial class PageDownloadService : IPageDownloadService
 
             var resourceUrls = HtmlPageProcessor.ProcessHtmlPageReferences(doc, uri).ToList();
 
-            Directory.CreateDirectory(hostFolder);
+            _fileSystemAccessor.CreateFolder(downloadRootFolder);
             var downloadTasks = resourceUrls.Select(async resourceUri =>
             {
                 try
@@ -101,8 +102,8 @@ internal partial class PageDownloadService : IPageDownloadService
                     var fileName = resourceUri?.LocalPath.TrimStart('/');
                     if (string.IsNullOrWhiteSpace(fileName)) fileName = "resource";
                     var filePath = Path.Combine(hostFolder, fileName);
-                    Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
-                    await File.WriteAllBytesAsync(filePath, resourceBytes);
+                    _fileSystemAccessor.CreateFolder(Path.GetDirectoryName(filePath)!);
+                    await _fileSystemAccessor.SaveFileAsync(filePath, resourceBytes);
                 }
                 catch (Exception)
                 { }
@@ -111,7 +112,9 @@ internal partial class PageDownloadService : IPageDownloadService
             await Task.WhenAll(downloadTasks);
 
             var htmlPath = Path.Combine(hostFolder, "index.html");
-            doc.Save(htmlPath);
+
+            var outputStream = _fileSystemAccessor.GetFileWriteStream(htmlPath);
+            doc.Save(outputStream);
 
             return new SavedPage(url, htmlPath, null);
         }

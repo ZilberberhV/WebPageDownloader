@@ -10,4 +10,9 @@ public static class ServiceRegistration
     {
         services.AddScoped<IPageDownloadService, PageDownloadService>();
     }
+
+    public static void AddLocalFileSystemAccessor(this IServiceCollection services)
+    {
+        services.AddScoped<IFileSystemAccessor, LocalFileSystemAccessor>();
+    }
 }
